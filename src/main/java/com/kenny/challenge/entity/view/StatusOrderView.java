@@ -2,6 +2,9 @@ package com.kenny.challenge.entity.view;
 
 import java.util.List;
 
+/**
+ * show all orders information and grouped by the order status
+ */
 public class StatusOrderView {
     private String orderStatus;
     private List<OrderTimespend> orderTimespends;

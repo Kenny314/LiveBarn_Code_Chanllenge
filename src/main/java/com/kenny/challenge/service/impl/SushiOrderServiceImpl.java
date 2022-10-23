@@ -54,6 +54,53 @@ public class SushiOrderServiceImpl implements SushiOrderServiceInf {
             return null;
         }
     }
+
+
+    @Transactional
+    @Override
+    public boolean cancelSushiOrder(Long orderId) {
+        Optional<SushiOrder> option = sushiOrderRepository.findById(orderId);
+        if(option.isEmpty()){
+            return false;
+        } else {
+            SushiOrder sushiOrder = option.get();
+            Status cancleStatus = StatusData.getStatusData(StatusData.STATUS_CANCEL);
+            sushiOrder.setStatus(cancleStatus);
+            this.sushiOrderRepository.save(sushiOrder);
+            return true;
+        }
+    }
+
+    @Transactional
+    @Override
+    public boolean pauseSushiOrder(Long orderId) {
+        Optional<SushiOrder> option = sushiOrderRepository.findById(orderId);
+        if(option.isEmpty()){
+            return false;
+        } else {
+            SushiOrder sushiOrder = option.get();
+            Status pauseStatus = StatusData.getStatusData(StatusData.STATUS_PAUSE);
+            sushiOrder.setStatus(pauseStatus);
+            this.sushiOrderRepository.save(sushiOrder);
+            return true;
+        }
+    }
+
+    @Transactional
+    @Override
+    public boolean resumeSushiOrder(Long orderId) {
+        Optional<SushiOrder> option = sushiOrderRepository.findById(orderId);
+        if(option.isEmpty()){
+            return false;
+        } else {
+            SushiOrder sushiOrder = option.get();
+            Status resumeStatus = StatusData.getStatusData(StatusData.STATUS_PROCESS);
+            sushiOrder.setStatus(resumeStatus);
+            this.sushiOrderRepository.save(sushiOrder);
+            return true;
+        }
+    }
+
     @Transactional
     public boolean updateSushiOrder(SushiOrder sushiOrder){
         Optional<SushiOrder> option = sushiOrderRepository.findById(sushiOrder.getId());
@@ -61,7 +108,6 @@ public class SushiOrderServiceImpl implements SushiOrderServiceInf {
             return false;
         } else {
             SushiOrder sushiOrder1 = option.get();
-
             sushiOrder1.setSushi(sushiOrder.getSushi());
             sushiOrder1.setStatus(sushiOrder.getStatus());
             this.sushiOrderRepository.save(sushiOrder1);

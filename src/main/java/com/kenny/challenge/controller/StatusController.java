@@ -7,19 +7,26 @@ import com.kenny.challenge.entity.view.StatusOrderView;
 import com.kenny.challenge.service.impl.StatusServiceImpl;
 import com.kenny.util.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A controller which is served POJO Status
+ */
 @RestController
 public class StatusController {
 
     @Autowired
     private StatusServiceImpl statusService;
 
+    /**
+     * retrieved all orders by order-status
+     * StatusOrderView is a view object which can organized the data and make data format in order to display better to frontend
+     * @return ResultEntity
+     */
     @GetMapping(value="/api/orders/status")
     public ResultEntity<List<StatusOrderView>> getStatusOrderInfo(){
         List<Status> statusList = statusService.queryAllStatus();

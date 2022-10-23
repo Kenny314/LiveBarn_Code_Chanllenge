@@ -5,6 +5,9 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * POJO Shshi
+ */
 @Entity
 @Table(name = "sushi")
 public class Sushi {

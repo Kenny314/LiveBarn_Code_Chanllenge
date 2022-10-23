@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * A controller which is served POJO Sushi Order
+ */
 @RestController
 public class SushiOrderController {
 
@@ -45,7 +48,11 @@ public class SushiOrderController {
     }
 
 
-
+    /**
+     * Using order_id to cancel an Order  and return result as json
+     * @param sushiOrderId
+     * @return ResultEntity<SushiOrder>
+     */
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value="/api/orders/{order_id}",method = RequestMethod.DELETE)
     public ResultEntity<SushiOrder> cancelOrder(@PathVariable("order_id") Long sushiOrderId){
@@ -53,15 +60,17 @@ public class SushiOrderController {
         if(sushiOrder == null){
             return ResultEntity.failed("can not find the order");
         } else {
-
-            Status cancelStatus = StatusData.getStatusData(StatusData.STATUS_CANCEL);
-            sushiOrder.setStatus(cancelStatus);
-            boolean result = sushiOrderService.updateSushiOrder(sushiOrder);
-            if(result){
-                return ResultEntity.successWithoutData("Order cancelled successful");
+            if(!sushiOrder.getStatus().getName().equals(StatusData.STATUS_PROCESS) || !sushiOrder.getStatus().getName().equals(StatusData.STATUS_CREAT)){
+                return ResultEntity.failed("Order cancelled failed, cause order status is " + sushiOrder.getStatus().getName());
             } else {
-                return ResultEntity.failed("Order cancelled failed");
+                boolean result = sushiOrderService.cancelSushiOrder(sushiOrderId);
+                if(result){
+                    return ResultEntity.successWithoutData("Order cancelled successful");
+                } else {
+                    return ResultEntity.failed("Order cancelled failed.");
+                }
             }
+
         }
     }
 
@@ -70,7 +79,8 @@ public class SushiOrderController {
      * only the order status is in-processed can be paused.
      * if the order status is not in-processed, return fail
      * @param sushiOrderId
-     * @return
+     * order id whick is keep in database
+     * @return ResultEntity<String>
      */
     @RequestMapping(value = "/api/orders/{order_id}/pause")
     public ResultEntity<String> pauseOrder(@PathVariable("order_id") Long sushiOrderId){
@@ -85,9 +95,7 @@ public class SushiOrderController {
                 return ResultEntity.failed("order's status is wrong, the status of order is "+ status.getName());
             } else {
 
-                Status pauseStatus = StatusData.getStatusData(StatusData.STATUS_PAUSE);
-                sushiOrder.setStatus(pauseStatus);
-                this.sushiOrderService.updateSushiOrder(sushiOrder);
+                this.sushiOrderService.pauseSushiOrder(sushiOrder.getId());
                 return ResultEntity.successWithoutData("Order paused");
             }
         }
@@ -97,7 +105,7 @@ public class SushiOrderController {
      * only the order status is paused can be resumed;
      * if the status is not paused return failed
      * @param sushiOrderId
-     * @return
+     * @return ResultEntity<String>
      */
     @RequestMapping(value = "/api/orders/{order_id}/resume")
     public ResultEntity<String> resumeOrder(@PathVariable("order_id") Long sushiOrderId){
@@ -111,9 +119,7 @@ public class SushiOrderController {
                 return ResultEntity.failed("order's status is wrong, the status of order is "+ status.getName());
             } else {
 
-                Status inprocessStatus = StatusData.getStatusData(StatusData.STATUS_PROCESS);
-                sushiOrder.setStatus(inprocessStatus);
-                this.sushiOrderService.updateSushiOrder(sushiOrder);
+                this.sushiOrderService.resumeSushiOrder(sushiOrder.getId());
                 return ResultEntity.successWithoutData("Order resumed successful");
             }
         }

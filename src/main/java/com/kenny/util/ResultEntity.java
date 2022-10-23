@@ -1,8 +1,14 @@
 package com.kenny.util;
 
-/*
+/**
+ * A encapsulation class which can give a universe object return to front
+ * including
+ * code:0 success, other fail;
+ * msg: the description of the return result
+ * data: a object which always retrieved from Database
  *
- * */
+ * @param <T>
+ */
 public class ResultEntity<T> {
     public static final String SUCCESS = "0";
     public static final String FAIL = "-1";

@@ -3,6 +3,9 @@ package com.kenny.challenge.entity;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * POJO Status
+ */
 @Entity
 @Table(name = "status")
 public class Status {

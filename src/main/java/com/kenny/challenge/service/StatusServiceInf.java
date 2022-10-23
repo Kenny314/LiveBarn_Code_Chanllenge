@@ -5,5 +5,11 @@ import com.kenny.challenge.entity.Status;
 import java.util.List;
 
 public interface StatusServiceInf {
-    public List<Status> queryAllStatus();
+
+    /**
+     * return all status information defined in database
+     * status is defined as a dictionary
+     * @return List<Status>
+     */
+    List<Status> queryAllStatus();
 }

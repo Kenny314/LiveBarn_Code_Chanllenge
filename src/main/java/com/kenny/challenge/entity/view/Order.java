@@ -2,6 +2,10 @@ package com.kenny.challenge.entity.view;
 
 import java.sql.Timestamp;
 
+/**
+ * order view model
+ * when retrieved order information from database and use this object to format and return to frontend
+ */
 public class Order {
     private Long id;
     private Long statusId;

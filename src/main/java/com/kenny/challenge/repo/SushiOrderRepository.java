@@ -4,6 +4,9 @@ import com.kenny.challenge.entity.SushiOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Order DAO
+ */
 @Repository
 public interface SushiOrderRepository extends JpaRepository<SushiOrder,Long> {
 

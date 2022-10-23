@@ -3,6 +3,9 @@ package com.kenny.challenge.entity;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+/**
+ * POJO SushiOrder refer to Order
+ */
 @Entity
 @Table(name = "sushi_order")
 public class SushiOrder {
