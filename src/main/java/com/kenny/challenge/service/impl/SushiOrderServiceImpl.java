@@ -6,11 +6,14 @@ import com.kenny.challenge.entity.Sushi;
 import com.kenny.challenge.entity.SushiOrder;
 import com.kenny.challenge.repo.SushiOrderRepository;
 import com.kenny.challenge.repo.SushiRepository;
+import com.kenny.challenge.system.data.StatusData;
+import com.kenny.challenge.system.data.SushiData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
@@ -36,14 +39,15 @@ public class SushiOrderServiceImpl implements SushiOrderServiceInf {
 
     @Transactional
     public SushiOrder creatOrderBySushiName(String sushiName){
-        Sushi sushi = this.sushiRepository.findSushiByName(sushiName);
-
+//        Sushi sushi = this.sushiRepository.findSushiByName(sushiName);
+        Sushi sushi = SushiData.getSushiData(sushiName);
         if(sushi != null){
             SushiOrder sushiOrder = new SushiOrder();
-            //TODO 优化 status
-            Status status = new Status("aaa");
+
+            Status createStatus = StatusData.getStatusData(StatusData.STATUS_CREAT);
             sushiOrder.setSushi(sushi);
-            sushiOrder.setStatus(status);
+            sushiOrder.setStatus(createStatus);
+            sushiOrder.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             this.sushiOrderRepository.save(sushiOrder);
             return sushiOrder;
         } else {

@@ -19,7 +19,7 @@ public class SushiOrder {
     @JoinColumn(name = "sushi_id",referencedColumnName="id")
     private Sushi sushi;
 
-    @Column(name = "createdAt")
+    @Column(name = "created_At")
     private Timestamp createdAt;
 
 

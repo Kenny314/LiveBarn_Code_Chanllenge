@@ -8,13 +8,13 @@ public class ResultEntity<T> {
     public static final String FAIL = "-1";
 
 
-    private String code;
 
-    private String msg;
 
     private T data;
 
+    private String code;
 
+    private String msg;
     public static <E> ResultEntity<E> successWithoutData() {
         return new ResultEntity<E>(SUCCESS, null, null);
     }
@@ -25,6 +25,10 @@ public class ResultEntity<T> {
 
     public static <E> ResultEntity<E> successWithData(E e) {
         return new ResultEntity<E>(SUCCESS, null, e);
+    }
+
+    public static <E> ResultEntity<E> successWithData(E e,String msg) {
+        return new ResultEntity<E>(SUCCESS, msg, e);
     }
 
     public static <E> ResultEntity<E> failed(String message) {

@@ -15,7 +15,7 @@ public class Sushi {
     private String name;
 
     @Column(name="time_to_make")
-    private Timestamp timeToMake;
+    private Integer timeToMake;
 
     @OneToMany(mappedBy = "sushi",cascade = CascadeType.ALL)
     private Set<SushiOrder> sushiOrders = new HashSet<>();
@@ -23,7 +23,7 @@ public class Sushi {
     protected Sushi() {
     }
 
-    public Sushi(String name, Timestamp timeToMake) {
+    public Sushi(String name, Integer timeToMake) {
         this.name = name;
         this.timeToMake = timeToMake;
     }
@@ -44,12 +44,20 @@ public class Sushi {
         this.name = name;
     }
 
-    public Timestamp getTimeToMake() {
+    public Integer getTimeToMake() {
         return timeToMake;
     }
 
-    public void setTimeToMake(Timestamp timeToMake) {
+    public void setTimeToMake(Integer timeToMake) {
         this.timeToMake = timeToMake;
+    }
+
+    public Set<SushiOrder> getSushiOrders() {
+        return sushiOrders;
+    }
+
+    public void setSushiOrders(Set<SushiOrder> sushiOrders) {
+        this.sushiOrders = sushiOrders;
     }
 
     @Override
