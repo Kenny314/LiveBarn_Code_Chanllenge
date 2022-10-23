@@ -1,5 +1,6 @@
 package com.kenny.challenge.entity.view;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public class StatusOrderView {
     }
 
     public StatusOrderView() {
-
+        this.orderTimespends = new ArrayList<>();
     }
 
     public String getOrderStatus() {
@@ -30,7 +31,26 @@ public class StatusOrderView {
         return orderTimespends;
     }
 
-    public void setOrderTimespends(List<OrderTimespend> orderTimespends) {
-        this.orderTimespends = orderTimespends;
+    @Override
+    public String toString() {
+        StringBuilder sborderTimespends = new StringBuilder();
+        if(orderTimespends != null && orderTimespends.size() != 0){
+            int i = 0;
+            for(OrderTimespend orderTimespend: orderTimespends){
+                sborderTimespends.append(orderTimespend.toString());
+                if(i == orderTimespends.size() -1 ){
+                    sborderTimespends.append("");
+
+                } else {
+                    sborderTimespends.append(",");
+                    i++;
+                }
+
+            }
+        }
+        String result = sborderTimespends.toString();
+
+
+        return result;
     }
 }

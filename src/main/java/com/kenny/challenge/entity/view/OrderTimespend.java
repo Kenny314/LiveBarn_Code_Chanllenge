@@ -28,5 +28,11 @@ public class OrderTimespend {
         this.timeSpend = timeSpend;
     }
 
-
+    @Override
+    public String toString() {
+        return "\r\t  {" + "\r"+
+                "\t\torderId:" + orderId + ",\r"+
+                "\t\ttimeSpend:'" + timeSpend + "\r" +
+                "\t  }";
+    }
 }
