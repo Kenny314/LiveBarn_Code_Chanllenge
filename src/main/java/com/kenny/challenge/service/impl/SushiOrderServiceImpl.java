@@ -12,15 +12,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.LockModeType;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SushiOrderServiceImpl implements SushiOrderServiceInf {
@@ -95,26 +99,14 @@ public class SushiOrderServiceImpl implements SushiOrderServiceInf {
     @Transactional
     @Override
     public boolean pauseSushiOrder(Long orderId) {
-        Optional<SushiOrder> option = sushiOrderRepository.findById(orderId);
-        if (option.isEmpty()) {
-            return false;
-        } else {
-            SushiOrder sushiOrder = option.get();
+        logger.info("pause order id :" + orderId);
+        if(inprocessOrderThreadMap.containsKey(orderId)){
             Thread thread = this.inprocessOrderThreadMap.get(orderId);
-            sushiOrder = this.sushiOrderRepository.getReferenceById(orderId);
-            Status pauseStatus = StatusData.getStatusData(StatusData.STATUS_PAUSE);
-            sushiOrder.setStatus(pauseStatus);
-            if(!Thread.currentThread().interrupted()){
-                Thread.currentThread().interrupt();
-            }
-            this.sushiOrderRepository.saveAndFlush(sushiOrder);
-            //remove the inprocess thread
-            inprocessOrderThreadMap.remove(orderId);
-            logger.info("&&&&&&&&&& thread name = " +thread.getName() );
-            //interrupt in processing order
-
+            thread.interrupt();
             return true;
         }
+        return false;
+
     }
 
     @Transactional
@@ -148,7 +140,7 @@ public class SushiOrderServiceImpl implements SushiOrderServiceInf {
 
         if (sushiOrder!= null && sushiOrder.getStatus().getName().equals(StatusData.STATUS_CREAT)) {
             logger.info("====" + Thread.currentThread().getName() + "=== Order_id = " + sushiOrder.getId());
-            sushiOrder = this.sushiOrderRepository.getById(sushiOrder.getId());
+            sushiOrder = this.sushiOrderRepository.getReferenceById(sushiOrder.getId());
             Status startStatus = StatusData.getStatusData(StatusData.STATUS_PROCESS);
             sushiOrder.setStatus(startStatus);
             logger.info("*************** starting *************");
@@ -157,11 +149,17 @@ public class SushiOrderServiceImpl implements SushiOrderServiceInf {
             Long sleepTime = Long.valueOf(sushiOrder.getSushi().getTimeToMake() * 1000);
             this.inprocessOrderThreadMap.put(sushiOrder.getId(),Thread.currentThread());
             //making sushi
-            Thread.sleep(sleepTime);
+            try {
+                Status finishStatus = StatusData.getStatusData(StatusData.STATUS_FINISH);
+                sushiOrder.setStatus(finishStatus);
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                logger.info("order is paused , so set the order status is paused");
+                Status finishStatus = StatusData.getStatusData(StatusData.STATUS_PAUSE);
+                sushiOrder.setStatus(finishStatus);
+            }
 
-            Status finishStatus = StatusData.getStatusData(StatusData.STATUS_FINISH);
-            sushiOrder.setStatus(finishStatus);
-            this.sushiOrderRepository.save(sushiOrder);
+            this.sushiOrderRepository.saveAndFlush(sushiOrder);
             this.inprocessOrderThreadMap.remove(sushiOrder.getId());
         }
 
