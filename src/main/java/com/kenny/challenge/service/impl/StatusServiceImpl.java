@@ -15,12 +15,15 @@ public class StatusServiceImpl implements StatusServiceInf {
     @Autowired
     StatusRepository statusRepository;
 
-
+    /**
+     * return all status information defined in database
+     * status is defined as a dictionary
+     * @return List<Status>
+     */
     @Override
     public List<Status> queryAllStatus() {
         Sort sort = Sort.by(Sort.Direction.ASC,"id");
-        List<Status> result = statusRepository.findAll(sort);
-        return result;
+        return statusRepository.findAll(sort);
     }
 
 }

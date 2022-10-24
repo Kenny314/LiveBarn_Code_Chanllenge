@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * show all orders information and grouped by the order status
+ * A DTO which can show all orders information and grouped by the order status
  */
 public class StatusOrderView {
     private String orderStatus;
@@ -40,7 +40,6 @@ public class StatusOrderView {
                 sborderTimespends.append(orderTimespend.toString());
                 if(i == orderTimespends.size() -1 ){
                     sborderTimespends.append("");
-
                 } else {
                     sborderTimespends.append(",");
                     i++;
@@ -48,9 +47,6 @@ public class StatusOrderView {
 
             }
         }
-        String result = sborderTimespends.toString();
-
-
-        return result;
+        return sborderTimespends.toString();
     }
 }

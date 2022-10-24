@@ -25,7 +25,13 @@ public class SushiOrderController {
     SushiOrderServiceInf sushiOrderService;
 
 
-
+    /**
+     * creat the Sushi order
+     * @param sushi data gathered from front end
+     * @param response set response code
+     * @return ResultEntity<Order>
+     * @throws InterruptedException
+     */
     @RequestMapping(value = "/api/orders", method = RequestMethod.POST)
     @ResponseBody
 //    @ResponseStatus(code = HttpStatus.CREATED)
@@ -45,7 +51,7 @@ public class SushiOrderController {
 
     /**
      * Using order_id to cancel an Order  and return result as json
-     * @param sushiOrderId
+     * @param sushiOrderId get orderId from front end
      * @return ResultEntity<SushiOrder>
      */
     @ResponseStatus(code = HttpStatus.OK)
@@ -96,7 +102,7 @@ public class SushiOrderController {
     /**
      * only the order status is paused can be resumed;
      * if the status is not paused return failed
-     * @param sushiOrderId
+     * @param sushiOrderId orderId from URI
      * @return ResultEntity<String>
      */
     @RequestMapping(value = "/api/orders/{order_id}/resume")
@@ -115,6 +121,10 @@ public class SushiOrderController {
         }
     }
 
+    /**
+     * when chef is free ,Automatically making the order
+     * @throws InterruptedException
+     */
     @RequestMapping(value = "/api/orders/make")
     public void makeSushi() throws InterruptedException {
         int i = 10;

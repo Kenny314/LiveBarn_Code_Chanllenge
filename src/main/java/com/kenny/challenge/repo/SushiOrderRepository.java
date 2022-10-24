@@ -14,6 +14,4 @@ import java.util.List;
 @Repository
 public interface SushiOrderRepository extends JpaRepository<SushiOrder,Long> {
 
-    List<SushiOrder> findByStatus(Status status, Sort sort);
-
 }

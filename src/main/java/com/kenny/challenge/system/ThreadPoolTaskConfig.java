@@ -52,12 +52,6 @@ public class ThreadPoolTaskConfig implements AsyncConfigurer {
 
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-//        return (throwable, method, obj) -> {
-//            logger.error("[ThreadPool Exception]：Message [{}], Method [{}]", throwable.getMessage(), method.getName());
-//            for (Object param : obj) {
-//                logger.error("Parameter value [{}] ", param);
-//            }
-//        };
         return new SimpleAsyncUncaughtExceptionHandler();
     }
     /**

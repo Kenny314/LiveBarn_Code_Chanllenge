@@ -1,7 +1,7 @@
 package com.kenny.util;
 
 /**
- * A encapsulation class which can give a universe object return to front
+ * A encapsulation class which can give a universe  object return to front
  * including
  * code:0 success, other fail;
  * msg: the description of the return result
@@ -22,23 +22,23 @@ public class ResultEntity<T> {
 
     private String msg;
     public static <E> ResultEntity<E> successWithoutData() {
-        return new ResultEntity<E>(SUCCESS, null, null);
+        return new ResultEntity<>(SUCCESS, null, null);
     }
 
     public static <E> ResultEntity<E> successWithoutData(String msg) {
-        return new ResultEntity<E>(SUCCESS, msg, null);
+        return new ResultEntity<>(SUCCESS, msg, null);
     }
 
     public static <E> ResultEntity<E> successWithData(E e) {
-        return new ResultEntity<E>(SUCCESS, null, e);
+        return new ResultEntity<>(SUCCESS, null, e);
     }
 
     public static <E> ResultEntity<E> successWithData(E e,String msg) {
-        return new ResultEntity<E>(SUCCESS, msg, e);
+        return new ResultEntity<>(SUCCESS, msg, e);
     }
 
     public static <E> ResultEntity<E> failed(String message) {
-        return new ResultEntity<E>(FAIL, message, null);
+        return new ResultEntity<>(FAIL, message, null);
     }
 
     public ResultEntity(String result, String msg, T data) {
