@@ -5,6 +5,7 @@ import com.kenny.challenge.entity.SushiOrder;
 import com.kenny.challenge.entity.view.OrderTimespend;
 import com.kenny.challenge.entity.view.StatusOrderView;
 import com.kenny.challenge.service.impl.StatusServiceImpl;
+import com.kenny.challenge.system.data.StatusData;
 import com.kenny.util.DataTranlateUtil;
 import com.kenny.util.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,14 @@ public class StatusController {
                     orderTimespend.setOrderId(sushiOrder.getId());
                     //TODO 确认timespent 的定义
                     orderTimespend.setTimeSpend(sushiOrder.getCreatedAt().toString());
+                    if(sushiOrder.getStatus().getName().equals(StatusData.STATUS_FINISH)){
+                        orderTimespend.setTimeSpend(sushiOrder.getSushi().getTimeToMake().toString());
+                    } else {
+                        Long currentTime = System.currentTimeMillis();
+                        Long creatTime = sushiOrder.getCreatedAt().getTime();
+                        Long timeSp = currentTime - creatTime;
+                        orderTimespend.setTimeSpend(timeSp.toString());
+                    }
                     statusOrderView.getOrderTimespends().add(orderTimespend);
                 }
                 statusOrderViewList.add(statusOrderView);

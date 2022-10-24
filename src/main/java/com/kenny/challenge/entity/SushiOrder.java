@@ -18,7 +18,7 @@ public class SushiOrder {
     @JoinColumn(name="status_id",referencedColumnName="id")
     private Status status;
 
-    @ManyToOne(targetEntity = Sushi.class,fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Sushi.class,fetch = FetchType.EAGER)
     @JoinColumn(name = "sushi_id",referencedColumnName="id")
     private Sushi sushi;
 

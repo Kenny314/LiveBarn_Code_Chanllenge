@@ -1,5 +1,5 @@
 INSERT INTO sushi (name, time_to_make)
-VALUES ('California Roll', 30),
+VALUES ('California Roll', 60),
        ('Kamikaze Roll', 40),
        ('Dragon Eye', 50);
 

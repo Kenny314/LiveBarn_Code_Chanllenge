@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Random;
 
 /**
  * A controller which is served POJO Sushi Order
@@ -34,7 +36,7 @@ public class SushiOrderController {
     @RequestMapping(value = "/api/orders", method = RequestMethod.POST)
     @ResponseBody
 //    @ResponseStatus(code = HttpStatus.CREATED)
-    public ResultEntity<Order> createOrder(@RequestBody Sushi sushi, HttpServletResponse response){
+    public ResultEntity<Order> createOrder(@RequestBody Sushi sushi, HttpServletResponse response) throws InterruptedException {
         SushiOrder sushiOrder = this.sushiOrderService.creatOrderBySushiName(sushi.getName());
         if(sushiOrder != null){
             Order order = DataTranlateUtil.transSushiOrderToOrderView(sushiOrder);
@@ -84,20 +86,14 @@ public class SushiOrderController {
      */
     @RequestMapping(value = "/api/orders/{order_id}/pause")
     public ResultEntity<String> pauseOrder(@PathVariable("order_id") Long sushiOrderId){
-        SushiOrder sushiOrder = this.sushiOrderService.getSushiOrder(sushiOrderId);
-        if(sushiOrder == null){
+        boolean isOrderInprocess = this.sushiOrderService.getInprocessSushiOrder(sushiOrderId);
+        if(!isOrderInprocess){
             return ResultEntity.failed("order is not existed");
         } else {
-            Status status = sushiOrder.getStatus();
 
-            if(!status.getName().equals(StatusData.STATUS_PROCESS)){
-                //return failed, if status is not "in-processed"
-                return ResultEntity.failed("order's status is wrong, the status of order is "+ status.getName());
-            } else {
+            this.sushiOrderService.pauseSushiOrder(sushiOrderId);
+            return ResultEntity.successWithoutData("Order paused successfully");
 
-                this.sushiOrderService.pauseSushiOrder(sushiOrder.getId());
-                return ResultEntity.successWithoutData("Order paused");
-            }
         }
     }
 
@@ -124,4 +120,17 @@ public class SushiOrderController {
             }
         }
     }
+
+    @RequestMapping(value = "/api/orders/make")
+    public void makeSushi() throws InterruptedException {
+        int i = 10;
+        while (true){
+            this.sushiOrderService.processSushiOrder();
+            Random r = new Random();
+            int timeSleep = r.nextInt(i);
+            Thread.sleep(timeSleep * 1000);
+        }
+    }
+
+
 }

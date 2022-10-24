@@ -21,7 +21,6 @@ public class SushiServiceImpl implements SushiServiceInf {
     public List<Sushi> queryAllSushi() {
         Sort sort = Sort.by(Sort.Direction.ASC,"id");
         List<Sushi> sushiList = this.sushiRepository.findAll(sort);
-
         return sushiList;
     }
 }

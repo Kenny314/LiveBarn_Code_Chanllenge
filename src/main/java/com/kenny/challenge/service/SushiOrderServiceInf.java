@@ -2,6 +2,8 @@ package com.kenny.challenge.service;
 
 import com.kenny.challenge.entity.SushiOrder;
 
+import java.util.List;
+
 /**
  * Service Layer, which is served Order
  */
@@ -12,7 +14,7 @@ public interface SushiOrderServiceInf {
      * @param sushiName
      * @return SushiOrder
      */
-    SushiOrder creatOrderBySushiName(String sushiName);
+    SushiOrder creatOrderBySushiName(String sushiName) throws InterruptedException;
 
     /**
      * update order information
@@ -45,10 +47,22 @@ public interface SushiOrderServiceInf {
      * @return boolean
      */
     boolean resumeSushiOrder(Long orderId);
+
+    /**
+     * start to make the sushi
+     * @param
+     * @return
+     */
+    void processSushiOrder() throws InterruptedException;
+
     /**
      * get order Information by order id
      * @param sushiOrderId
      * @return
      */
     SushiOrder getSushiOrder(Long sushiOrderId);
+
+    List<SushiOrder> getCreatedSushiOrders();
+
+    boolean getInprocessSushiOrder(Long orderId);
 }
