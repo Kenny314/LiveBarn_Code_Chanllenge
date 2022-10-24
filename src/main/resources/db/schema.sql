@@ -15,6 +15,15 @@ CREATE TABLE sushi_order
     created_At TIMESTAMP NOT NULL default CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS order_history;
+CREATE TABLE order_history
+(
+    id        INT AUTO_INCREMENT PRIMARY KEY,
+    status_id INT       NOT NULL,
+    order_id  INT       NOT NULL,
+    created_At TIMESTAMP NOT NULL default CURRENT_TIMESTAMP
+);
+
 DROP TABLE IF EXISTS status;
 CREATE TABLE status
 (

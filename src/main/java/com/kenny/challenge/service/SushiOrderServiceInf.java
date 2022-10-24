@@ -62,7 +62,6 @@ public interface SushiOrderServiceInf {
      */
     SushiOrder getSushiOrder(Long sushiOrderId);
 
-    List<SushiOrder> getCreatedSushiOrders();
 
     boolean getInprocessSushiOrder(Long orderId);
 }

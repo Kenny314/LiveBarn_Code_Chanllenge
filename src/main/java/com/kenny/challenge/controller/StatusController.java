@@ -4,7 +4,7 @@ import com.kenny.challenge.entity.Status;
 import com.kenny.challenge.entity.SushiOrder;
 import com.kenny.challenge.entity.view.OrderTimespend;
 import com.kenny.challenge.entity.view.StatusOrderView;
-import com.kenny.challenge.service.impl.StatusServiceImpl;
+import com.kenny.challenge.service.StatusServiceInf;
 import com.kenny.challenge.system.data.StatusData;
 import com.kenny.util.DataTranlateUtil;
 import com.kenny.util.ResultEntity;
@@ -22,7 +22,7 @@ import java.util.List;
 public class StatusController {
 
     @Autowired
-    private StatusServiceImpl statusService;
+    private StatusServiceInf statusService;
 
     /**
      * retrieved all orders by order-status
@@ -43,7 +43,7 @@ public class StatusController {
                 for(SushiOrder sushiOrder : status.getSushiOrders()){
                     OrderTimespend orderTimespend = new OrderTimespend();
                     orderTimespend.setOrderId(sushiOrder.getId());
-                    //TODO 确认timespent 的定义
+                    //TODO confirm timespent definition
                     orderTimespend.setTimeSpend(sushiOrder.getCreatedAt().toString());
                     if(sushiOrder.getStatus().getName().equals(StatusData.STATUS_FINISH)){
                         orderTimespend.setTimeSpend(sushiOrder.getSushi().getTimeToMake().toString());

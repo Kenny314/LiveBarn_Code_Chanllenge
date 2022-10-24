@@ -4,7 +4,7 @@ import com.kenny.challenge.entity.Status;
 import com.kenny.challenge.entity.Sushi;
 import com.kenny.challenge.entity.SushiOrder;
 import com.kenny.challenge.entity.view.Order;
-import com.kenny.challenge.service.impl.SushiOrderServiceImpl;
+import com.kenny.challenge.service.SushiOrderServiceInf;
 import com.kenny.challenge.system.data.StatusData;
 import com.kenny.util.DataTranlateUtil;
 import com.kenny.util.ResultEntity;
@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -23,16 +22,10 @@ import java.util.Random;
 public class SushiOrderController {
 
     @Autowired
-    SushiOrderServiceImpl sushiOrderService;
+    SushiOrderServiceInf sushiOrderService;
 
 
 
-    //TODO Only three chefs
-    //Only three chefs are available, thus only three orders can be processed at the same time
-    //When an order is submitted, the order record should be saved into database with status set to "created"
-    //When a chef is ready to process an order, the corresponding order record should be updated in the database with status set to "in-progress"
-    //The field "time_to_make" from sushi table represents how long it takes to make a specific kind of sushi. For example, a California Roll takes 30 seconds to make, thus a chef will be occupied for 30 seconds to finish making the sushi
-    //When an order is completed, the corresponding order record should be updated in the database with status set to "finished"
     @RequestMapping(value = "/api/orders", method = RequestMethod.POST)
     @ResponseBody
 //    @ResponseStatus(code = HttpStatus.CREATED)
@@ -90,9 +83,12 @@ public class SushiOrderController {
         if(!isOrderInprocess){
             return ResultEntity.failed("order is not existed");
         } else {
-
-            this.sushiOrderService.pauseSushiOrder(sushiOrderId);
-            return ResultEntity.successWithoutData("Order paused successfully");
+            boolean isPaused = this.sushiOrderService.pauseSushiOrder(sushiOrderId);
+            if(isPaused){
+                return ResultEntity.successWithoutData("Order paused successfully");
+            } else {
+                return ResultEntity.failed("order paused failed");
+            }
 
         }
     }
@@ -110,11 +106,9 @@ public class SushiOrderController {
             return ResultEntity.failed("order is not existed");
         } else {
             Status status = sushiOrder.getStatus();
-
             if(!status.getName().equals(StatusData.STATUS_PAUSE)){
                 return ResultEntity.failed("order's status is wrong, the status of order is "+ status.getName());
             } else {
-
                 this.sushiOrderService.resumeSushiOrder(sushiOrder.getId());
                 return ResultEntity.successWithoutData("Order resumed successful");
             }

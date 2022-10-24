@@ -4,7 +4,6 @@ import com.kenny.challenge.service.StatusServiceInf;
 import com.kenny.challenge.entity.Status;
 import com.kenny.challenge.repo.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 

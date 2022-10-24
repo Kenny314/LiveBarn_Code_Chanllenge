@@ -1,7 +1,6 @@
 package com.kenny.challenge.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
